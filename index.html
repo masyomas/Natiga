@@ -1,0 +1,63 @@
+
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8" />
+<title>نتيجة الصف الأول الثانوي ٢٠٢٥</title>
+<style>
+body {
+  background: linear-gradient(135deg, silver, gold, #b9f2ff);
+  font-family: 'Arial', sans-serif;
+  direction: rtl;
+  text-align: center;
+}
+h1 {
+  color: #333;
+}
+table {
+  margin: auto;
+  border-collapse: collapse;
+  width: 80%%;
+  background-color: #fff;
+  border: 2px solid #444;
+}
+td, th {
+  border: 1px solid #999;
+  padding: 8px;
+}
+footer {
+  margin-top: 20px;
+  font-size: 18px;
+  color: #222;
+}
+</style>
+</head>
+<body>
+<h1>نتيجة الصف الاول الثانوي للعام ٢٠٢٥</h1>
+<h2>مدرسة الخدمة الثانوية العامة المشتركة</h2>
+<input type="text" id="seatInput" placeholder="ادخل رقم الجلوس" />
+<button onclick="searchResult()">بحث</button>
+<div id="result"></div>
+<footer>مع تحياتي أ/ محمود عادل صالح</footer>
+<script>
+let students;
+fetch('students.json').then(res => res.json()).then(data => students = data);
+
+function searchResult(){
+  let seat = document.getElementById('seatInput').value.replace(/[٠-٩]/g, d => '٠١٢٣٤٥٦٧٨٩'.indexOf(d));
+  let student = students.find(s => s.seat_number === seat);
+  let div = document.getElementById('result');
+  if(student){
+    let table = '<table><tr><th>المادة</th><th>الدرجة</th></tr>';
+    for(let subject in student.subjects){
+      table += `<tr><td>${subject}</td><td>${student.subjects[subject]}</td></tr>`;
+    }
+    table += `</table><p>المجموع: ${student.total}</p><p>الغياب: ${student.absence} أيام</p>`;
+    div.innerHTML = table;
+  } else {
+    div.innerHTML = "<p>لم يتم العثور على الطالب</p>";
+  }
+}
+</script>
+</body>
+</html>
